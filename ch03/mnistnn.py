@@ -60,8 +60,6 @@ if __name__ =="__main__":
     # 事先训练好的神经网络，第一层50个神经元，第二层100个神经元
     network = init_network()
 
-    # 每批训练数据100个
-    batch_size = 100
     accuracy_cnt = 0
     # for i in range(len(x)):
     #     y_pred = predict(network, x[i])
@@ -69,10 +67,17 @@ if __name__ =="__main__":
     #     if p == y[i]:
     #         accuracy_cnt += 1
 
-    for i in range(0,len(x),batch_size):
-        y_pred_batch = predict(network,x[i:i+batch_size])
-        # 解释下为什么axis=1，求每行的最大值，就是比较同一行的每一列，所以axis=1 表示列
-        p_batch = np.argmax(y_pred_batch,axis=1)
-        accuracy_cnt += np.sum(p_batch == y[i:i+batch_size])
+    # 每批预测数据100个
+    # batch_size = 100
+    # for i in range(0,len(x),batch_size):
+    #     y_pred_batch = predict(network,x[i:i+batch_size])
+    #     # 解释下为什么axis=1，求每行的最大值，就是比较同一行的每一列，所以axis=1 表示列
+    #     p_batch = np.argmax(y_pred_batch,axis=1)
+    #     accuracy_cnt += np.sum(p_batch == y[i:i+batch_size])
+    # print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
 
-    print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
+    # 一次性预测
+    y_pre = predict(network,x)
+    p = np.argmax(y_pre,axis=1)
+
+    print("Accuracy:" + str(metrics.accuracy_score(y,p)))
