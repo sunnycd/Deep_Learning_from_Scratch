@@ -1,6 +1,10 @@
 """
-两层神经网络学习：
-    
+两层神经网络学习：正向传播
+    1、每次预更新某个权重，然后计算最终的loss，决定当前权重的斜率
+    2、遍历完所有权重，根据斜率更新所有权重
+    计算次数太多，浪费时间，以本例 输入层 784，中间层50个神经元，输出层10个神经元：
+    每次更新权重都要计算 loss 784*50 + 50 + 50*10+ 10 = 39760
+    当神经网络层数和每层神经元增多后，计算将无法实施
 """
 import numpy as np
 from dataset.mnist import load_mnist
@@ -51,10 +55,13 @@ class TwoLayerNet:
     # x:输入数据, t:监督数据
     def numerical_gradient(self, x, t):
         # 其实这里参数W 不相关的，只是为了给loss 函数绑定x，t数据
-        # 是为了更新W，但predict 中直接利用属性W求值，而不是通过函数传递
+        # 是为了更新W，但 predict 中直接利用属性W求值，而不是通过函数传递
         loss_W = lambda W: self.loss(x, t)
 
         grads = {}
+        """
+        numerical_gradient 利用数值微分，逐个求出梯度下降斜率
+        """
         grads['W1'] = numerical_gradient(loss_W, self.params['W1'])
         grads['b1'] = numerical_gradient(loss_W, self.params['b1'])
         grads['W2'] = numerical_gradient(loss_W, self.params['W2'])
@@ -101,6 +108,12 @@ def softmax(a):
 
 
 def numerical_gradient(f, x):
+    """
+    梯度= (fxh1 - fxh2) / (2 * h)
+    :param f: 
+    :param x: 
+    :return: 
+    """
     h = 1e-4  # 0.0001
     grad = np.zeros_like(x)
 
@@ -139,6 +152,8 @@ def cross_entropy_error(y, t):
     batch_size = y.shape[0]
     # 简化后的损失函数值，很妙
     # y[m][n]存储着每个样本属于每种类别的概率,m 样本个数，n为每个类别的概率
+    # y[m][t] 就是正确样本的概率
+    # - np.log(P) 就是分类的损失函数 - 对数函数
     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
 
 if __name__ == "__main__":
