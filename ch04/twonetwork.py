@@ -189,3 +189,4 @@ if __name__ == "__main__":
         # 记录学习过程
         loss = network.loss(x_batch, t_batch)
         train_loss_list.append(loss)
+        print(loss)
