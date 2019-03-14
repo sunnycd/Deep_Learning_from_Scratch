@@ -1,4 +1,10 @@
 # coding: utf-8
+"""
+本节讲解的是 Dropout 来解决过拟合问题：
+    使用随机森林的思路，在每层网络增加 Dropout，训练过程中随机删除神经元。
+    增加 Dropout 后，每层的网络变为：Affine + Batch Norm + Activation + Dropout 
+    Dropout 后，需要注意在 predict 时，需要乘上 dropout_ratio，而不是像训练时丢失神经元
+"""
 import os
 import sys
 sys.path.append(os.pardir)  # 为了导入父目录的文件而进行的设定
