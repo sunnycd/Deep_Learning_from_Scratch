@@ -28,7 +28,8 @@ t_val = t_train[:validation_num]
 x_train = x_train[validation_num:]
 t_train = t_train[validation_num:]
 
-# 超参搜索时，训练 epocs 可以小，减少训练时间
+# 超参搜索时，训练 epochs 可以小，减少训练时间
+# 但 epochs 小，对lr 小的的模型不太公平
 def __train(lr, weight_decay, epocs=50):
     network = MultiLayerNet(input_size=784, hidden_size_list=[100, 100, 100, 100, 100, 100],
                             output_size=10, weight_decay_lambda=weight_decay)
